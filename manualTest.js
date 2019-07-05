@@ -60,4 +60,11 @@ function move (row, column, letter) {
 // move(0, 1, "X")
 // console.log("----------------")
 
-console.log(Math.floor(Math.random()*100))
+// console.log(Math.floor(Math.random()*100))
+
+let arr = [1,2,3,4,5];
+arr = arr.filter(num => num != 3)
+// console.log(newArr);
+console.log(arr)
+console.log(arr.includes(5));
+ticTacToe.positionTracker.includes(position)

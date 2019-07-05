@@ -16,6 +16,10 @@ let ticTacToe = {
   ],
   playerSymbol: "",
   computerSymbol: "",
+  positionTracker: [1,2,3,4,5,6,7,8,9],
+  positionUpdater: function(position) {
+    this.positionTracker = this.positionTracker.filter(num => num != position);
+  },
   // boardClear:
   //   this.board = [
   //   ["   ", "   ", "   "],
@@ -50,6 +54,7 @@ let ticTacToe = {
     } else if (position == 9) {
       this.board[4][2] = ` ${this.playerSymbol} `;
     }
+    this.positionUpdater(position);
     ticTacToe.displayBoard();
   },
   // Computer position works
@@ -77,11 +82,11 @@ let ticTacToe = {
     } else if (row === 4 && column === 2) {
       computerPosition = 9;
     } 
-
-    if(computerPosition === position) {
-      return ticTacToe.computerPositionGenerator(position);
-    } else {
+    if(ticTacToe.positionTracker.includes(computerPosition)) {
+      this.positionUpdater(computerPosition);
       return computerPosition;
+    } else {
+      return ticTacToe.computerPositionGenerator(position);
     }
   }
 };
@@ -133,17 +138,21 @@ function winConditionComputer(){
 // Program begins by user picking either X or O
 // The computer becomes the other symbol automatically
 rl.question('Choose X or O? ', (symbol) => {
+  if (symbol === "x") {
+    symbol = 'X';
+  } else if (symbol === 'o'){
+    symbol = 'O';
+  }
   ticTacToe.playerSymbol = symbol;
   console.log(ticTacToe.displayBoard());
 
-  if (symbol === "X" || symbol === "x") {
+  if (symbol === "X") {
     ticTacToe.computerSymbol = "O";
   } else {
     ticTacToe.computerSymbol = "X";
   }
 // Displaying the symbol for both the user and the computer
-  console.log(`You: ${ticTacToe.playerSymbol}
-  Computer: ${ticTacToe.computerSymbol}`);
+  console.log(`You: ${ticTacToe.playerSymbol}\nComputer: ${ticTacToe.computerSymbol}`);
 // Asking user where they want to place their chosen symbol
   rl.setPrompt(`Choose a number to place ${ticTacToe.playerSymbol}?`);
   rl.prompt();
@@ -151,11 +160,22 @@ rl.question('Choose X or O? ', (symbol) => {
   let count = 0;
   rl.on('line', (position) => {
     ticTacToe.makeMove(position);
-    console.log(`You moved to ${position}`);
+    console.log(`You moved to => ${position}`);
+
+    if(winConditionPlayer()) {
+      console.log("Yay, You win!");
+      rl.close();
+    } else if (winConditionComputer()) {
+      console.log("Sorry, you lose. Better luck next time.");
+      rl.close();
+    } else {
+      rl.setPrompt("Make your next move");
+      rl.prompt();
+    }
 
     let computerPosition = ticTacToe.computerPositionGenerator(position);
-    ticTacToe.computerPositionGenerator(computerPosition);
-    console.log("Computer Position " + computerPosition);
+    // ticTacToe.computerPositionGenerator(computerPosition);
+    console.log("Computer Position => " + computerPosition);
 
       if (computerPosition == 1 && ticTacToe.board !== ` ${ticTacToe.playerSymbol} ` && ticTacToe.board !== ` ${ticTacToe.computerSymbol} `) {
         ticTacToe.board[0][0] = ` ${ticTacToe.computerSymbol} `;
@@ -181,12 +201,13 @@ rl.question('Choose X or O? ', (symbol) => {
 
     console.log(`Computer moved to: ${computerPosition}`);
     console.log("Turn: " + count);
+    console.log(ticTacToe.positionTracker);
     count++;
-    if(winConditionPlayer() || winConditionComputer()) {
+    if(winConditionPlayer()) {
       console.log("Yay, You win!");
       rl.close();
     } else if (winConditionComputer()) {
-      console.log("Sorry the computer won");
+      console.log("Sorry, you lose. Better luck next time.");
       rl.close();
     } else {
       rl.setPrompt("Make your next move");
