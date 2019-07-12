@@ -88,6 +88,20 @@ let ticTacToe = {
     } else {
       return ticTacToe.computerPositionGenerator(position);
     }
+  },
+  userPositionChecker: function (position) {
+    ticTacToe.positionUpdater(position);
+    if(!ticTacToe.positionTracker.includes(position)) {
+      rl.question("Invalide make another move\n", (newPosition) => {
+        // ticTacToe.positionUpdater(newPosition);
+        ticTacToe.userPositionChecker(newPosition);
+        // if (!ticTacToe.positionTracker.includes(newPosition)){
+          
+        // } else {
+        //   position = newPosition;
+        // }
+      })
+    }
   }
 };
 // Conditions Work for both
@@ -156,9 +170,10 @@ rl.question('Choose X or O? ', (symbol) => {
 // Asking user where they want to place their chosen symbol
   rl.setPrompt(`Choose a number to place ${ticTacToe.playerSymbol}?`);
   rl.prompt();
-
-  let count = 0;
+  let count = 1;
+  // Make to function recursive
   rl.on('line', (position) => {
+    // ticTacToe.userPositionChecker(position);
     ticTacToe.makeMove(position);
     console.log(`You moved to => ${position}`);
 
@@ -168,9 +183,17 @@ rl.question('Choose X or O? ', (symbol) => {
     } else if (winConditionComputer()) {
       console.log("Sorry, you lose. Better luck next time.");
       rl.close();
+    } else if (ticTacToe.positionTracker.length === 0) {
+      console.log("This game is a tie, better luck next game!");
+      rl.close();
     } else {
       rl.setPrompt("Make your next move");
       rl.prompt();
+    }
+
+    if (ticTacToe.positionTracker.length === 0) {
+      console.log("This game is a tie, better luck next game!");
+      rl.close();
     }
 
     let computerPosition = ticTacToe.computerPositionGenerator(position);
@@ -203,7 +226,10 @@ rl.question('Choose X or O? ', (symbol) => {
     console.log("Turn: " + count);
     console.log(ticTacToe.positionTracker);
     count++;
-    if(winConditionPlayer()) {
+    if (ticTacToe.positionTracker.length === 0) {
+      console.log("This game is a tie, better luck next game!");
+      rl.close();
+    } else if(winConditionPlayer()) {
       console.log("Yay, You win!");
       rl.close();
     } else if (winConditionComputer()) {

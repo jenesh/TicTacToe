@@ -65,6 +65,9 @@ function move (row, column, letter) {
 let arr = [1,2,3,4,5];
 arr = arr.filter(num => num != 3)
 // console.log(newArr);
-console.log(arr)
-console.log(arr.includes(5));
-ticTacToe.positionTracker.includes(position)
+// console.log(arr)
+// console.log(arr.includes(5));
+// ticTacToe.positionTracker.includes(position)
+
+
+
