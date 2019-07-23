@@ -1,3 +1,4 @@
+const colors = require('colors');
 const readline = require("readline");
 let rl = readline.createInterface({
   input: process.stdin,
@@ -92,7 +93,7 @@ let ticTacToe = {
   userPositionChecker: function (position) {
     ticTacToe.positionUpdater(position);
     if(!ticTacToe.positionTracker.includes(position)) {
-      rl.question("Invalide make another move\n", (newPosition) => {
+      rl.question("Invalide make another move\n".red, (newPosition) => {
         // ticTacToe.positionUpdater(newPosition);
         ticTacToe.userPositionChecker(newPosition);
         // if (!ticTacToe.positionTracker.includes(newPosition)){
@@ -151,19 +152,19 @@ function winConditionComputer(){
 
 // Program begins by user picking either X or O
 // The computer becomes the other symbol automatically
-rl.question('Choose X or O? ', (symbol) => {
+rl.question('Choose X or O? '.bold, (symbol) => {
   if (symbol === "x") {
     symbol = 'X';
   } else if (symbol === 'o'){
     symbol = 'O';
   }
-  ticTacToe.playerSymbol = symbol;
+  ticTacToe.playerSymbol = symbol.green;
   console.log(ticTacToe.displayBoard());
 
   if (symbol === "X") {
-    ticTacToe.computerSymbol = "O";
+    ticTacToe.computerSymbol = "O".red;
   } else {
-    ticTacToe.computerSymbol = "X";
+    ticTacToe.computerSymbol = "X".red;
   }
 // Displaying the symbol for both the user and the computer
   console.log(`You: ${ticTacToe.playerSymbol}\nComputer: ${ticTacToe.computerSymbol}`);
@@ -178,10 +179,10 @@ rl.question('Choose X or O? ', (symbol) => {
     console.log(`You moved to => ${position}`);
 
     if(winConditionPlayer()) {
-      console.log("Yay, You win!");
+      console.log("Yay, You win!".green.bold.inverse);
       rl.close();
     } else if (winConditionComputer()) {
-      console.log("Sorry, you lose. Better luck next time.");
+      console.log("Sorry, you lose. Better luck next time.".red.bold.inverse);
       rl.close();
     } else if (ticTacToe.positionTracker.length === 0) {
       console.log("This game is a tie, better luck next game!");
@@ -230,10 +231,10 @@ rl.question('Choose X or O? ', (symbol) => {
       console.log("This game is a tie, better luck next game!");
       rl.close();
     } else if(winConditionPlayer()) {
-      console.log("Yay, You win!");
+      console.log("Yay, You win!".green.inverse.bold);
       rl.close();
     } else if (winConditionComputer()) {
-      console.log("Sorry, you lose. Better luck next time.");
+      console.log("Sorry, you lose. Better luck next time.".red.inverse.bold);
       rl.close();
     } else {
       rl.setPrompt("Make your next move");

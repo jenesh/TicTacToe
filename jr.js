@@ -4,6 +4,7 @@ const reader = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
+
 let filteredWords = [
   "I",
   "You",
